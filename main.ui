@@ -221,75 +221,109 @@
 												<property name="title">
 													<string>Results</string>
 												</property>
-												<layout class="QGridLayout" name="gl1">
-													<item row="0" column="0">
-														<widget class="QLabel" name="label_5">
-															<property name="text">
-																<string>Directories</string>
-															</property>
-														</widget>
+												<layout class="QVBoxLayout" name="verticalLayout4">
+													<item>
+														<layout class="QGridLayout" name="gl1">
+															<item row="0" column="0">
+																<widget class="QLabel" name="label_5">
+																	<property name="text">
+																		<string>Directories</string>
+																	</property>
+																</widget>
+															</item>
+															<item row="0" column="1">
+																<widget class="QLineEdit" name="directoryCount">
+																	<property name="readOnly">
+																		<bool>true</bool>
+																	</property>
+																</widget>
+															</item>
+															<item row="1" column="0">
+																<widget class="QLabel" name="label_6">
+																	<property name="text">
+																		<string>Files</string>
+																	</property>
+																</widget>
+															</item>
+															<item row="1" column="1">
+																<widget class="QLineEdit" name="fileCount">
+																	<property name="readOnly">
+																		<bool>true</bool>
+																	</property>
+																</widget>
+															</item>
+															<item row="2" column="0">
+																<widget class="QLabel" name="label_7">
+																	<property name="text">
+																		<string>Lines</string>
+																	</property>
+																</widget>
+															</item>
+															<item row="2" column="1">
+																<widget class="QLineEdit" name="lineCount">
+																	<property name="readOnly">
+																		<bool>true</bool>
+																	</property>
+																</widget>
+															</item>
+															<item row="3" column="0">
+																<widget class="QLabel" name="label_8">
+																	<property name="text">
+																		<string>Characters</string>
+																	</property>
+																</widget>
+															</item>
+															<item row="3" column="1">
+																<widget class="QLineEdit" name="characterCount">
+																	<property name="readOnly">
+																		<bool>true</bool>
+																	</property>
+																</widget>
+															</item>
+														</layout>
 													</item>
-													<item row="0" column="1">
-														<widget class="QLineEdit" name="directoryCount">
-															<property name="readOnly">
-																<bool>true</bool>
-															</property>
-														</widget>
-													</item>
-													<item row="1" column="0">
-														<widget class="QLabel" name="label_6">
-															<property name="text">
-																<string>Files</string>
-															</property>
-														</widget>
-													</item>
-													<item row="1" column="1">
-														<widget class="QLineEdit" name="fileCount">
-															<property name="readOnly">
-																<bool>true</bool>
-															</property>
-														</widget>
-													</item>
-													<item row="2" column="0">
-														<widget class="QLabel" name="label_7">
-															<property name="text">
-																<string>Lines</string>
-															</property>
-														</widget>
-													</item>
-													<item row="2" column="1">
-														<widget class="QLineEdit" name="lineCount">
-															<property name="readOnly">
-																<bool>true</bool>
-															</property>
-														</widget>
-													</item>
-													<item row="3" column="0">
-														<widget class="QLabel" name="label_8">
-															<property name="text">
-																<string>Characters</string>
-															</property>
-														</widget>
-													</item>
-													<item row="3" column="1">
-														<widget class="QLineEdit" name="characterCount">
-															<property name="readOnly">
-																<bool>true</bool>
-															</property>
-														</widget>
-													</item>
-													<item row="4" column="0">
-														<widget class="QPushButton" name="startButton">
-															<property name="text">
-																<string>Start</string>
-															</property>
-															<property name="icon">
-																<iconset theme="media-playback-start"/>
-															</property>
-															<property name="enabled">
-																<bool>false</bool>
-															</property>
-														</widget>
+													<item>
+														<layout class="QHBoxLayout" name="horizontalLayout4">
+															<item>
+																<widget class="QPushButton" name="startButton">
+																	<property name="text">
+																		<string>Start</string>
+																	</property>
+																	<property name="icon">
+																		<iconset theme="media-playback-start"/>
+																	</property>
+																	<property name="enabled">
+																		<bool>false</bool>
+																	</property>
+																</widget>
+															</item>
+															<item>
+																<widget class="QPushButton" name="statsButton">
+																	<property name="text">
+																		<string>Stats</string>
+																	</property>
+																	<property name="icon">
+																		<iconset theme="dialog-information"/>
+																	</property>
+																	<property name="enabled">
+																		<bool>false</bool>
+																	</property>
+																</widget>
+															</item>
+															<item>
+																<spacer name="horizontalSpacer2">
+																	<property name="orientation">
+																		<enum>Qt::Horizontal</enum>
+																	</property>
+																	<property name="sizeHint" stdset="0">
+																		<size>
+																			<width>20</width>
+																			<height>40</height>
+																		</size>
+																	</property>
+																</spacer>
+															</item>
+														</layout>
 													</item>
 												</layout>
 											</widget>

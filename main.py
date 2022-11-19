@@ -1,8 +1,8 @@
 from PyQt5 import uic
 from PyQt5.QtCore import Qt, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtWidgets import (QApplication, QErrorMessage, QMainWindow,
-		QTreeWidgetItem, QFileDialog)
+from PyQt5.QtWidgets import (QApplication, QErrorMessage, QMainWindow, QVBoxLayout,
+		QTreeWidgetItem, QFileDialog, QDialog, QGroupBox, QTableWidget, QTableWidgetItem, QHeaderView)
 
 import sys, os, json
 		
@@ -21,6 +21,7 @@ class MainWindow(QMainWindow):
 		self.resultFiles = 0
 		self.resultLines = 0
 		self.resultChars = 0
+		self.resultStats = {}
 	
 		self.openButton.clicked.connect(self.open)
 		self.saveButton.clicked.connect(lambda: self.save(self.currProject == None))
@@ -28,6 +29,7 @@ class MainWindow(QMainWindow):
 		self.browsePathButton.clicked.connect(self.browsePath)
 		self.searchButton.clicked.connect(lambda: self.search())
 		self.startButton.clicked.connect(self.start)
+		self.statsButton.clicked.connect(self.showStats)
 		
 		self.projectPath.textChanged.connect(self.updateButtons)
 		self.projectExtensions.textChanged.connect(self.updateButtons)
@@ -52,6 +54,7 @@ class MainWindow(QMainWindow):
 		self.saveAsButton.setEnabled(enabled)
 		self.searchButton.setEnabled(enabled)
 		self.startButton.setEnabled(enabled)
+		self.statsButton.setEnabled(enabled)
 		
 		self.treeIsDirty = True
 	
@@ -217,6 +220,9 @@ class MainWindow(QMainWindow):
 		
 	def setResultChars(self, val):
 		self.resultChars = val
+		
+	def setStats(self, val):
+		self.resultStats = val
 	
 	def start(self):
 		rootItem = self.projectTree.topLevelItem(0)
@@ -232,10 +238,15 @@ class MainWindow(QMainWindow):
 		self.countThread.files.connect(lambda value: self.setResultFiles(value))
 		self.countThread.lines.connect(lambda value: self.setResultLines(value))
 		self.countThread.characters.connect(lambda value: self.setResultChars(value))
+		self.countThread.statsSignal.connect(lambda value: self.setStats(value))
 		self.countThread.errorSignal.connect(lambda error: print(error))
 		
 		self.countThread.start()
 		self.progress.show()
+		
+	def showStats(self):
+		dialog = StatsDialog(self, self.resultStats)
+		dialog.show()
 		
 
 class CountThread(QThread):
@@ -244,7 +255,7 @@ class CountThread(QThread):
 	files = pyqtSignal("int")
 	lines = pyqtSignal("int")
 	characters = pyqtSignal("int")
-	text = pyqtSignal("QString")
+	statsSignal = pyqtSignal(dict)
 	errorSignal = pyqtSignal(str)
 
 	def __init__(self, rootNode, countEmptyLines, countCharacters, stripLines) -> None:
@@ -257,9 +268,13 @@ class CountThread(QThread):
 		self.fileCount = 0
 		self.lineCount = 0
 		self.charCount = 0
+		self.stats = {}
 
 	def run(self) -> None:
 		try:
+			
+			linesForFile = []
+			charsForFile = []
 			
 			files = self.getFilesRecursive(self.rootNode, self.rootNode.text(0))
 			self.fileCount = len(files)
@@ -273,21 +288,29 @@ class CountThread(QThread):
 			for file in files:
 				fh = open(file, "r")
 				lines = fh.readlines()
+				fileLineCount = 0
+				fileCharCount = 0
 				
 				if self.countCharacters:
 					for line in lines:
 						lineStrip = line.strip()
 						if self.countEmptyLines or lineStrip != "":
-							self.lineCount += 1
-							self.charCount += len(lineStrip) if self.stripLines else len(line)
+							fileLineCount += 1
+							fileCharCount += len(lineStrip) if self.stripLines else len(line)
 				else:
 					if self.countEmptyLines:
-						self.lineCount += len(lines)
+						fileLineCount += len(lines)
 					else:
 						for line in lines:
 							if line.strip() == "":
 								continue
-							self.lineCount += 1
+							fileLineCount += 1
+							
+				linesForFile.append([file, fileLineCount])
+				charsForFile.append([file, fileCharCount])
+				
+				self.lineCount += fileLineCount
+				self.charCount += fileCharCount
 				
 				currProgress = int((f * 100) / self.fileCount)
 				if currProgress != lastProgress:
@@ -296,9 +319,34 @@ class CountThread(QThread):
 					self.characters.emit(self.charCount)
 					self.progress.emit(currProgress)
 				f += 1
-				
+			
+			linesForFile = list(sorted(linesForFile, key=lambda item: item[1], reverse=True))
+			charsForFile = list(sorted(charsForFile, key=lambda item: item[1], reverse=True))
+			
+			self.stats = {
+				'Bigger files (by lines)': [],
+				'Bigger files (by chars)': []
+			}
+			statsMaxEntries = 15
+			linesForFileLen = len(linesForFile)
+			charsForFileLen = len(charsForFile)
+			
+			for i in range(statsMaxEntries):
+				if i < linesForFileLen:
+					entry = linesForFile[i]
+					percent = int((entry[1] * 100) / self.lineCount if self.lineCount != 0 else 1)
+					entry.append(str(percent) + "%")
+					self.stats['Bigger files (by lines)'].append(entry)
+				if i < charsForFileLen:
+					entry = charsForFile[i]
+					percent = int((entry[1] * 100) / self.charCount if self.charCount != 0 else 1)
+					entry.append(str(percent) + "%")
+					self.stats['Bigger files (by chars)'].append(entry)
+			
+			
 			self.lines.emit(self.lineCount)
 			self.characters.emit(self.charCount)
+			self.statsSignal.emit(self.stats)
 			self.progress.emit(100)
 				
 			
@@ -321,6 +369,35 @@ class CountThread(QThread):
 				files += self.getFilesRecursive(node, parentPath + "/" + node.text(0))
 		return files
 
+class StatsDialog(QDialog):
+	
+	def __init__(self, parent, stats):
+		super(StatsDialog, self).__init__(parent)
+		uic.loadUi("stats-dialog.ui", self)
+		
+		self.setWindowModality(Qt.ApplicationModal)
+		self.setWindowIcon(QIcon(os.path.dirname(os.path.realpath(__file__)) + "/icon.png"))
+		
+		for k, v in stats.items():
+			table = QTableWidget()
+			table.setRowCount(len(v))
+			table.setColumnCount(3)
+			table.setHorizontalHeaderLabels(['File', 'Count', '%'])
+			i = 0
+			for item in v:
+				table.setItem(i, 0, QTableWidgetItem(item[0]))
+				table.setItem(i, 1, QTableWidgetItem(str(item[1])))
+				table.setItem(i, 2, QTableWidgetItem(str(item[2])))
+				i += 1
+			table.horizontalHeader().setStretchLastSection(True)
+			table.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+			lyt = QVBoxLayout()
+			lyt.addWidget(table)
+			box = QGroupBox(k)
+			box.setLayout(lyt)
+			self.statsLayout.addWidget(box)
+		
+		
 			
 if __name__ == '__main__':
 	app = QApplication([])
