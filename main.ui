@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>MainWindow</class>
+	<widget class="QMainWindow" name="MainWindow">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>800</width>
+				<height>600</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Code Line Counter</string>
+		</property>
+		<property name="windowIcon">
+			<iconset><normaloff>icon.png</normaloff>icon.png</iconset>
+		</property>
+		<widget class="QWidget" name="centralwidget">
+			<layout class="QGridLayout" name="gridLayout">
+				<item row="0" column="0">
+					<layout class="QVBoxLayout" name="verticalLayout">
+						<property name="spacing">
+							<number>8</number>
+						</property>
+						<property name="leftMargin"><number>8</number></property>
+						<property name="topMargin"><number>8</number></property>
+						<property name="rightMargin"><number>8</number></property>
+						<property name="bottomMargin"><number>8</number></property>
+						<item>
+							<layout class="QHBoxLayout" name="horizontalLayout_2">
+								<item>
+									<widget class="QPushButton" name="openButton">
+										<property name="text">
+											<string>Open</string>
+										</property>
+										<property name="icon">
+											<iconset theme="document-open"/>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<widget class="QPushButton" name="saveButton">
+										<property name="text">
+											<string>Save</string>
+										</property>
+										<property name="icon">
+											<iconset theme="document-save"/>
+										</property>
+										<property name="enabled">
+											<bool>false</bool>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<widget class="QPushButton" name="saveAsButton">
+										<property name="text">
+											<string>Save as</string>
+										</property>
+										<property name="icon">
+											<iconset theme="document-save-as"/>
+										</property>
+										<property name="enabled">
+											<bool>false</bool>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<spacer name="horizontalSpacer">
+										<property name="orientation">
+											<enum>Qt::Horizontal</enum>
+										</property>
+										<property name="sizeHint" stdset="0">
+											<size>
+												<width>20</width>
+												<height>40</height>
+											</size>
+										</property>
+									</spacer>
+								</item>
+							</layout>
+						</item>
+						<item>
+							<layout class="QHBoxLayout" name="horizontalLayout">
+								<item>
+									<widget class="QTreeWidget" name="projectTree">
+										<attribute name="headerVisible">
+											<bool>false</bool>
+										</attribute>
+									</widget>
+								</item>
+								<item>
+									<layout class="QVBoxLayout" name="verticalLayout2">
+										<item>
+											<widget class="QGroupBox" name="gb1">
+												<property name="title">
+													<string>Settings</string>
+												</property>
+												<layout class="QGridLayout" name="gl1">
+													<item row="0" column="0">
+														<widget class="QLabel" name="label_2">
+															<property name="text">
+																<string>Project Path</string>
+															</property>
+														</widget>
+													</item>
+													<item row="0" column="1">
+														<widget class="QLineEdit" name="projectPath">
+															<property name="text">
+																<string></string>
+															</property>
+														</widget>
+													</item>
+													<item row="0" column="2">
+														<widget class="QPushButton" name="browsePathButton">
+															<property name="text">
+																<string>Browse</string>
+															</property>
+														</widget>
+													</item>
+													<item row="1" column="0">
+														<widget class="QLabel" name="label_3">
+															<property name="text">
+																<string>File Extensions</string>
+															</property>
+														</widget>
+													</item>
+													<item row="1" column="1">
+														<widget class="QLineEdit" name="projectExtensions">
+															<property name="placeholderText">
+																<string>py java xlm</string>
+															</property>
+															<property name="text">
+																<string></string>
+															</property>
+														</widget>
+													</item>
+													<item row="2" column="0">
+														<widget class="QLabel" name="label_32">
+															<property name="text">
+																<string>Ignore dirs/files</string>
+															</property>
+														</widget>
+													</item>
+													<item row="2" column="1">
+														<widget class="QLineEdit" name="projectIgnoreFiles">
+															<property name="text">
+																<string></string>
+															</property>
+														</widget>
+													</item>
+													<item row="3" column="0">
+														<widget class="QLabel" name="label_4">
+															<property name="text">
+																<string>Count empty lines</string>
+															</property>
+														</widget>
+													</item>
+													<item row="3" column="1">
+														<widget class="QCheckBox" name="projectCountEmpty">
+															<property name="text">
+																<string></string>
+															</property>
+															<property name="checked">
+																<bool>true</bool>
+															</property>
+														</widget>
+													</item>
+													<item row="4" column="0">
+														<widget class="QLabel" name="label_4">
+															<property name="text">
+																<string>Count characters</string>
+															</property>
+														</widget>
+													</item>
+													<item row="4" column="1">
+														<widget class="QCheckBox" name="projectCountCharacters">
+															<property name="text">
+																<string></string>
+															</property>
+															<property name="checked">
+																<bool>true</bool>
+															</property>
+														</widget>
+													</item>
+													<item row="5" column="0">
+														<widget class="QLabel" name="label_4">
+															<property name="text">
+																<string>Strip lines</string>
+															</property>
+														</widget>
+													</item>
+													<item row="5" column="1">
+														<widget class="QCheckBox" name="projectStripLines">
+															<property name="text">
+																<string></string>
+															</property>
+															<property name="checked">
+																<bool>true</bool>
+															</property>
+														</widget>
+													</item>
+													<item row="6" column="0">
+														<widget class="QPushButton" name="searchButton">
+															<property name="text">
+																<string>Search</string>
+															</property>
+															<property name="icon">
+																<iconset theme="system-search"/>
+															</property>
+															<property name="enabled">
+																<bool>false</bool>
+															</property>
+														</widget>
+													</item>
+												</layout>
+											</widget>
+										</item>
+										<item>
+											<widget class="QGroupBox" name="gb2">
+												<property name="title">
+													<string>Results</string>
+												</property>
+												<layout class="QGridLayout" name="gl1">
+													<item row="0" column="0">
+														<widget class="QLabel" name="label_5">
+															<property name="text">
+																<string>Directories</string>
+															</property>
+														</widget>
+													</item>
+													<item row="0" column="1">
+														<widget class="QLineEdit" name="directoryCount">
+															<property name="readOnly">
+																<bool>true</bool>
+															</property>
+														</widget>
+													</item>
+													<item row="1" column="0">
+														<widget class="QLabel" name="label_6">
+															<property name="text">
+																<string>Files</string>
+															</property>
+														</widget>
+													</item>
+													<item row="1" column="1">
+														<widget class="QLineEdit" name="fileCount">
+															<property name="readOnly">
+																<bool>true</bool>
+															</property>
+														</widget>
+													</item>
+													<item row="2" column="0">
+														<widget class="QLabel" name="label_7">
+															<property name="text">
+																<string>Lines</string>
+															</property>
+														</widget>
+													</item>
+													<item row="2" column="1">
+														<widget class="QLineEdit" name="lineCount">
+															<property name="readOnly">
+																<bool>true</bool>
+															</property>
+														</widget>
+													</item>
+													<item row="3" column="0">
+														<widget class="QLabel" name="label_8">
+															<property name="text">
+																<string>Characters</string>
+															</property>
+														</widget>
+													</item>
+													<item row="3" column="1">
+														<widget class="QLineEdit" name="characterCount">
+															<property name="readOnly">
+																<bool>true</bool>
+															</property>
+														</widget>
+													</item>
+													<item row="4" column="0">
+														<widget class="QPushButton" name="startButton">
+															<property name="text">
+																<string>Start</string>
+															</property>
+															<property name="icon">
+																<iconset theme="media-playback-start"/>
+															</property>
+															<property name="enabled">
+																<bool>false</bool>
+															</property>
+														</widget>
+													</item>
+												</layout>
+											</widget>
+										</item>
+										<item>
+											<widget class="QProgressBar" name="progress">
+												<property name="visible">
+													<bool>false</bool>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<spacer name="verticalSpacer">
+												<property name="orientation">
+													<enum>Qt::Vertical</enum>
+												</property>
+												<property name="sizeHint" stdset="0">
+													<size>
+														<width>20</width>
+														<height>40</height>
+													</size>
+												</property>
+											</spacer>
+										</item>
+									</layout>
+								</item>
+							</layout>
+						</item>
+					</layout>
+				</item>
+			</layout>
+		</widget>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>
